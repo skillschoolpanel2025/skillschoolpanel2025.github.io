@@ -172,31 +172,7 @@ class SupabaseService {
 
 window.supabaseService = new SupabaseService();
 
-async function createUser(userData) {
-    if (window.supabaseService.user?.email !== window.supabaseService.authorizedEmail) {
-        throw new Error('Недостаточно прав для создания пользователей');
-    }
-    
-    let table = '';
-    switch (userData.role) {
-        case 'admin':
-            table = 'admins';
-            break;
-        case 'student':
-            table = 'students';  
-            break;  
-        case 'teacher':
-            table = 'teachers';
-            break;
-        default:
-            throw new Error('Неизвестная роль пользователя');
-    }
-    const insertData = { ...userData };
-    delete insertData.role;
-    const { data, error } = await window.supabaseService.client.from(table).insert([insertData]);
-    if (error) throw error;
-    return data;
-}
+
 
 window.Database = window.Database || {};
 window.Database.createUser = createUser;
