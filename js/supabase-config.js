@@ -48,11 +48,6 @@ window.Database = {
                 throw new Error('Необходимые поля отсутствуют');
             }
 
-            const auth = window.auth;
-            if (!auth || !auth.isAuthorizedEmail(auth.user?.email)) {
-                throw new Error('Недостаточно прав для создания пользователей');
-            }
-
             const { data: user, error: userError } = await window.supabaseClient
                 .from(window.TABLES.USERS)
                 .insert([{
