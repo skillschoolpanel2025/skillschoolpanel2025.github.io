@@ -1,0 +1,78 @@
+/* Стили для анимированного фона */
+.animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(125deg, 
+        rgba(124, 77, 255, 0.2) 0%, 
+        rgba(10, 10, 20, 0.9) 30%, 
+        rgba(0, 0, 30, 0.8) 50%, 
+        rgba(10, 10, 20, 0.9) 70%, 
+        rgba(124, 77, 255, 0.2) 100%);
+    background-size: 300% 300%;
+    animation: bgAnim 30s ease infinite;
+    will-change: background-position; /* Указываем браузеру, что будет меняться */
+    transform: translateZ(0); /* Форсируем GPU ускорение */
+}
+
+@keyframes bgAnim {
+    0% {
+        background-position: 0% 25%;
+    }
+    25% {
+        background-position: 50% 50%;
+    }
+    50% {
+        background-position: 100% 75%;
+    }
+    75% {
+        background-position: 50% 50%;
+    }
+    100% {
+        background-position: 0% 25%;
+    }
+}
+
+/* Стили для страницы авторизации */
+.auth-container {
+    position: fixed; /* Используем fixed вместо relative */
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background-color: transparent; /* Важно - прозрачный фон */
+    overflow: hidden; /* Чтобы фон не выходил за пределы */
+    /* Отключаем любую анимацию контейнера */
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+
+/* Специальные стили для анимированного фона в авторизации */
+.auth-container .animated-bg {
+    position: fixed; /* Фиксированное позиционирование вместо absolute */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* За содержимым */
+    /* Отключаем смещения на старте */
+    transform: none !important; 
+}
+
+/* Обеспечиваем видимость анимированного фона на всей странице */
+body {
+    background-color: var(--dark);
+    color: var(--light);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}

@@ -1,0 +1,98 @@
+// Команды для тестирования ошибок в таблице
+// Эти команды можно выполнить в консоли разработчика (F12)
+
+// 1. Тест ошибки загрузки таблицы
+function testTableLoadError() {
+  const main = window.mainInstance;
+  main.showTableLoadError({
+    message: "Не удалось загрузить данные из таблицы. Сервер недоступен.",
+    code: "ERR_CONNECTION_REFUSED"
+  }, "students");
+}
+
+// 2. Тест ошибки валидации данных
+function testValidationError() {
+  const error = {
+    message: "Ошибка валидации: неверный формат email",
+    code: "VALIDATION_ERROR",
+    details: [
+      { field: "email", message: "Неверный формат email" }
+    ]
+  };
+  window.mainInstance.showToast("Ошибка валидации данных", "error");
+  console.error("Ошибка валидации:", error);
+}
+
+// 3. Тест ошибки сохранения данных
+function testSaveError() {
+  const error = {
+    message: "Ошибка при сохранении данных: нарушение уникального ключа",
+    code: "UNIQUE_VIOLATION"
+  };
+  alert("Ошибка при сохранении: " + error.message);
+}
+
+// 4. Тест отображения пустой таблицы
+function testEmptyTable() {
+  window.mainInstance.renderTableData([], "students");
+}
+
+// 5. Тест модального окна с деталями
+function testViewDetails() {
+  const testData = {
+    id: "53e34f10-a4e2-440a-9ed7-5f6501cb642c",
+    fullname: "Артём Лебеди",
+    email: "artembedk1n099@gmail.com",
+    password: "******",
+    balance: 980,
+    phone: "+7 (909) 099 45-67",
+    time: "12:00",
+    birthdate: "12.02.1999"
+  };
+  
+  window.mainInstance.showModal(
+    "Детали пользователя", 
+    `<div class="record-details">
+      <div class="record-details-header">
+        <div class="record-avatar">
+          <div class="avatar-placeholder"><i class="fas fa-user"></i></div>
+        </div>
+        <div class="record-title">
+          <h3>${testData.fullname}</h3>
+          <p class="record-email"><i class="fas fa-envelope"></i> ${testData.email}</p>
+        </div>
+      </div>
+      <div class="record-details-content">
+        <div class="record-fields-list">
+          <div class="record-field id-field">
+            <div class="field-icon"><i class="fas fa-fingerprint"></i></div>
+            <div class="field-content">
+              <div class="field-label">id</div>
+              <div class="field-value">${testData.id}</div>
+            </div>
+          </div>
+          <div class="record-field balance-field">
+            <div class="field-icon"><i class="fas fa-money-bill"></i></div>
+            <div class="field-content">
+              <div class="field-label">balance</div>
+              <div class="field-value">${testData.balance} ₽</div>
+            </div>
+          </div>
+          <div class="record-field phone-field">
+            <div class="field-icon"><i class="fas fa-phone"></i></div>
+            <div class="field-content">
+              <div class="field-label">phone</div>
+              <div class="field-value">${testData.phone}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`
+  );
+}
+
+// Как использовать:
+// 1. Открыть консоль разработчика (F12)
+// 2. Вставить нужную функцию и выполнить, например:
+// testTableLoadError();
+// testViewDetails();

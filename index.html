@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSchool Panel</title>
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/background.css">
+    <link rel="stylesheet" href="css/table-editor.css">
+    <link rel="stylesheet" href="css/sql-editor.css">
+    <link rel="stylesheet" href="css/user-card-extras.css">
+    <link rel="stylesheet" href="css/preloader.css">
+    <link rel="stylesheet" href="css/preloader_resources.css">
+    <link rel="stylesheet" href="css/instruction.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/stats.css">
+    <link rel="stylesheet" href="css/afterload-animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/cookies.js"></script>
+    <script src="js/preloader_real.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        window.SupabaseInitialized = false;
+    </script>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="loading-bar"></div>
+    <div class="site-preloader" id="sitePreloader">
+        <div class="animated-bg"></div>
+        <div class="preloader-content">
+            <div class="loading-content" id="loadingContent">
+                <div class="preloader-logo">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2 class="preloader-title">SkillSchool Panel</h2>
+                <h3 class="preloader-subtitle">Инициализация системы</h3>
+                <div class="loading-status">Инициализируем компоненты...</div>
+                
+                <div class="loading-resources">
+                    <!-- Ресурсы будут добавлены динамически -->
+                </div>
+                
+                <div class="loading-progress">
+                    <span id="resourceCount">0 / 0 ресурсов загружено</span>
+                </div>
+                
+                <div class="loading-progress-bar">
+                    <div class="progress-message" id="loadingProgressMessage">
+                        Подготовка к загрузке...
+                    </div>
+                </div>
+                
+                <div class="fun-fact" id="funFact">
+                    Загрузка...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="authContainer" class="auth-container">
+        <div class="animated-bg"></div>
+        <div class="loading-spinner" id="loadingSpinner"></div>
+        <div class="auth-box">
+            <div class="auth-header">
+                <i class="fas fa-user-shield"></i>
+                <h2>Вход в систему</h2>
+            </div>
+            <form id="authForm">
+                <div class="form-group">
+                    <label for="authEmail">Email</label>
+                    <input type="email" id="authEmail" class="form-control" placeholder="SkillSchool@noname.com" required>
+                </div>
+                
+                <div class="form-group password-group">
+                    <label for="authPassword">Пароль</label>
+                    <div class="password-input">
+                        <input type="password" id="authPassword" class="form-control" placeholder="Пароль" required>
+                        <i class="fas fa-eye" id="togglePassword"></i>
+                    </div>
+                </div>
+                
+                <div id="authError" class="error-message"></div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Войти
+                </button>
+                
+                <div class="auth-divider">или</div>
+                    
+                <button type="button" class="btn btn-outline disabled" style="opacity: 0.5; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); text-align: center;" disabled>
+                    <i class="fas fa-lock"></i> Другие способы входа отключены
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="mainContainer" class="container hidden">
+        <button id="instructionBtn" class="instruction-button">
+            <i class="fas fa-question-circle"></i>
+        </button>
+
+        <header>
+            <div class="logo">
+                <i class="fas fa-user-shield"></i>
+                <h1>SkillSchool Panel</h1>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">H</div>
+                <span id="userName">Никита Саралашвили</span>
+                <button id="logoutBtn" class="btn btn-sm btn-danger">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h3 class="nav-title">Навигация</h3>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-section="users">
+                            <i class="fas fa-users-cog"></i>
+                            <span>Управление пользователями</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="security">
+                            <i class="fas fa-lock"></i>
+                            <span>Безопасность</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="stats">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Статистика</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Настройки</span>
+                        </a>
+                    </li>
+
+                </ul>
+
+                <h3 class="nav-title">Администрирование</h3>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="database">
+                            <i class="fas fa-database"></i>
+                            <span>База данных</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="server">
+                            <i class="fas fa-server"></i>
+                            <span>Сервер</span>
+                        </a>
+                    </li>
+                    <!-- Удалена ссылка на инструкцию, теперь она будет вызываться кнопкой внизу -->
+                </ul>
+            </aside>
+
+            <main class="content">
+                <div class="content-header">
+                    <h2 class="content-title">Управление пользователями</h2>
+                </div>
+
+                <div id="usersList" class="user-cards">
+                    <div class="user-card student">
+                        <div class="user-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>Создать ученика</h3>
+                        <p>Добавьте нового ученика в систему с ограниченными правами доступа.</p>
+                        <button class="btn btn-primary btn-sm open-modal" data-type="student">
+                            <i class="fas fa-plus"></i>
+                            Создать
+                        </button>
+                    </div>
+
+                    <div class="user-card teacher">
+                        <div class="user-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3>Создать учителя</h3>
+                        <p>Добавьте преподавателя с доступом к учебным материалам.</p>
+                        <button class="btn btn-primary btn-sm open-modal" data-type="teacher">
+                            <i class="fas fa-plus"></i>
+                            Создать
+                        </button>
+                    </div>
+                    <div class="user-card admin">
+                        <div class="user-icon">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <h3>Создать администратора</h3>
+                        <p>Добавьте нового администратора системы с полными правами.</p>
+                        <button class="btn btn-primary btn-sm open-modal" data-type="admin">
+                            <i class="fas fa-plus"></i>
+                            Создать
+                        </button>
+                    </div>
+                </div>
+                <div id="statsSection" class="hidden">
+                    <div class="content-header">
+                        <h2 class="content-title">Статистика</h2>
+                    </div>
+                    
+                    <div class="stats-cards-grid">
+                        <div class="stats-card">
+                            <div class="stats-card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stats-card-label">Всего пользователей</div>
+                            <div class="stats-card-value" id="totalUsersCount">0</div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <div class="stats-card-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="stats-card-label">Студентов</div>
+                            <div class="stats-card-value" id="studentsCount">0</div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <div class="stats-card-icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <div class="stats-card-label">Преподавателей</div>
+                            <div class="stats-card-value" id="teachersCount">0</div>
+                        </div>
+                        
+                        <div class="stats-card">
+                            <div class="stats-card-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stats-card-label">SkillCoins</div>
+                            <div class="stats-card-value" id="skillcoinsCount">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-charts-grid">
+                        <div class="stats-chart-container">
+                            <h3>Активность пользователей</h3>
+                            <canvas id="userActivityChart"></canvas>
+                        </div>
+                        
+                        <div class="stats-chart-container">
+                            <h3>Распределение SkillCoins</h3>
+                            <canvas id="skillcoinsDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="securitySection" class="hidden">
+                    <div class="content-header">
+                        <h2 class="content-title">Безопасность</h2>
+                    </div>
+                    
+                    <div style="display: flex; gap: 20px;">
+                        <!-- Изменение Email -->
+                        <div style="flex: 1; background: rgba(40, 40, 60, 0.5); border-radius: 12px; padding: 20px;">
+                            <h3 style="font-size: 18px; margin-bottom: 20px; color: #7c4dff;"><i class="fas fa-envelope"></i> Изменение Email</h3>
+                            <p style="color: #aaa; font-size: 14px; margin-bottom: 20px;">Введите новый Email-адрес для вашей учетной записи. На указанный адрес будет отправлено письмо с подтверждением.</p>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 8px; color: #888;">
+                                    <i class="fas fa-at"></i> Новый Email
+                                </label>
+                                <input type="email" id="newEmail" class="form-control" placeholder="example@skillschool.com" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(30, 30, 40, 0.6); border: 1px solid #444; color: white;">
+                            </div>
+                            
+                            <button id="changeEmailBtn" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: #7c4dff; border: none; color: white; padding: 12px; border-radius: 8px; cursor: pointer;">
+                                <i class="fas fa-check"></i> Изменить Email
+                            </button>
+                        </div>
+                        
+                        <!-- Изменение пароля -->
+                        <div style="flex: 1; background: rgba(40, 40, 60, 0.5); border-radius: 12px; padding: 20px;">
+                            <h3 style="font-size: 18px; margin-bottom: 20px; color: #7c4dff;"><i class="fas fa-lock"></i> Изменение пароля</h3>
+                            <p style="color: #aaa; font-size: 14px; margin-bottom: 20px;">Создайте новый надёжный пароль для вашей учетной записи. Рекомендуется использовать комбинацию букв, цифр и специальных символов.</p>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 8px; color: #888;">
+                                    <i class="fas fa-key"></i> Новый пароль
+                                </label>
+                                <div style="position: relative;">
+                                    <input type="password" id="newPassword" class="form-control" placeholder="••••••" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(30, 30, 40, 0.6); border: 1px solid #444; color: white;">
+                                    <i class="fas fa-eye toggle-password" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #888; cursor: pointer;"></i>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 8px; color: #888;">
+                                    <i class="fas fa-shield-alt"></i> Подтверждение пароля
+                                </label>
+                                <div style="position: relative;">
+                                    <input type="password" id="confirmPassword" class="form-control" placeholder="••••••" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(30, 30, 40, 0.6); border: 1px solid #444; color: white;">
+                                    <i class="fas fa-eye toggle-password" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #888; cursor: pointer;"></i>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 15px;">
+                                <label style="display: block; margin-bottom: 8px; color: #888;">
+                                    Надёжность пароля:
+                                </label>
+                                <div style="font-size: 14px; color: #ff6b6b;">
+                                    Недостаточно надёжный
+                                </div>
+                            </div>
+                            
+                            <button id="changePasswordBtn" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: #7c4dff; border: none; color: white; padding: 12px; border-radius: 8px; cursor: pointer;">
+                                <i class="fas fa-shield-alt"></i> Изменить пароль
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="databaseSection" class="hidden">
+                    <div class="content-header">
+                        <h2 class="content-title">Управление базой данных</h2>
+                    </div>
+                    <div id="usersTable"></div>
+                </div>
+                
+                <div id="serverSection" class="hidden">
+                    <!-- Содержимое будет загружено динамически -->
+                </div>
+                
+                <div id="settingsSection" class="hidden">
+                    <div class="content-header">
+                        <h2 class="content-title"></h2>
+                        <div class="header-actions">
+                            <button id="resetSettingsBtn" class="btn btn-sm btn-outline">
+                                <i class="fas fa-undo"></i> Сбросить настройки
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-container">
+                        <!-- Раздел настроек языка -->
+                        <div class="settings-block">
+                            <h3><i class="fas fa-language"></i> Язык интерфейса</h3>
+                            <div class="settings-row">
+                                <select id="languageSelect" class="form-control">
+                                    <option value="ru">Русский</option>
+                                    <option value="en">English</option>
+                                </select>
+                                <button id="applyLanguageBtn" class="btn btn-primary">Применить</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Раздел настроек темы -->
+                        <div class="settings-block">
+                            <h3><i class="fas fa-palette"></i> Тема оформления</h3>
+                            <div class="theme-options">
+                                <div class="theme-card active" data-theme="default">
+                                    <div class="theme-preview default-theme"></div>
+                                    <span>Стандартная</span>
+                                </div>
+                                <div class="theme-card" data-theme="dark">
+                                    <div class="theme-preview dark-theme"></div>
+                                    <span>Тёмная</span>
+                                </div>
+                                <div class="theme-card" data-theme="light">
+                                    <div class="theme-preview light-theme"></div>
+                                    <span>Светлая</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Раздел настроек шрифтов -->
+                        <div class="settings-block">
+                            <h3><i class="fas fa-font"></i> Настройки шрифтов</h3>
+                            <div class="font-settings">
+                                <div class="settings-row">
+                                    <label>Выберите шрифт:</label>
+                                    <select id="fontSelect" class="form-control">
+                                        <option value="default">Inter (стандартный)</option>
+                                        <option value="gropled" selected>Gropled</option>
+                                        <option value="benzin">Benzin Bold</option>
+                                        <option value="custom">Загруженный шрифт</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="settings-row">
+                                    <label>Размер шрифта</label>
+                                    <div class="range-container">
+                                        <input type="range" id="fontSizeRange" min="12" max="20" value="16" class="settings-range">
+                                        <span id="fontSizeValue">16px</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="settings-row">
+                                    <label>Загрузить свой шрифт:</label>
+                                    <input type="file" id="customFontUpload" accept=".ttf,.otf,.woff,.woff2" class="form-control">
+                                    <p class="font-hint">Поддерживаемые форматы: TTF, OTF, WOFF, WOFF2</p>
+                                </div>
+                                
+                                <div class="settings-row">
+                                    <label>Предпросмотр шрифта:</label>
+                                    <div class="font-preview-container">
+                                        <p id="fontPreviewText" class="font-preview-text">Съешь же ещё этих мягких французских булок, да выпей чаю. The quick brown fox jumps over the lazy dog.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="settings-row">
+                                    <button id="applyFontBtn" class="btn btn-primary btn-block">Применить настройки шрифта</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="instructionSection" class="hidden">
+                    <div class="content-header">
+                        <h2 class="content-title"><i class="fas fa-book"></i> Инструкция по использованию SkillSchool Panel</h2>
+                        <button id="closeInstructionBtn" class="btn btn-sm btn-danger">
+                            <i class="fas fa-times"></i> Закрыть
+                        </button>
+                    </div>
+                    
+                    <div class="instruction-blocks">
+                        <!-- Общая информация -->
+                        <div class="instruction-block">
+                            <h3><i class="fas fa-info-circle"></i> Общая информация</h3>
+                            <p>SkillSchool Panel - это административная панель для управления пользователями, просмотра статистики и настройки системы. Панель интегрирована с базой данных Supabase и предоставляет удобный интерфейс для всех административных задач.</p>
+                            <div class="tip-box">
+                                <strong>Совет:</strong> Для входа используйте авторизованную почту (saralashvilischool2025@gmail.com) и установленный пароль. Доступ ограничен только для авторизованных пользователей.
+                            </div>
+                        </div>
+                        
+                        <!-- Управление пользователями -->
+                        <div class="instruction-block">
+                            <h3><i class="fas fa-users-cog"></i> Управление пользователями</h3>
+                            <p>Раздел управления пользователями позволяет создавать новые учетные записи различных типов:</p>
+                            <ul>
+                                <li><strong>Ученики</strong> - пользователи с ограниченными правами доступа, имеющие баланс</li>
+                                <li><strong>Учителя</strong> - пользователи с доступом к учебным материалам</li>
+                                <li><strong>Администраторы</strong> - пользователи с полными правами доступа к системе</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Безопасность -->
+                        <div class="instruction-block">
+                            <h3><i class="fas fa-lock"></i> Безопасность</h3>
+                            <p>Раздел безопасности содержит инструменты для управления вашей учетной записью администратора:</p>
+                            <ul>
+                                <li><strong>Смена пароля</strong> - позволяет изменить текущий пароль (требуется знание текущего пароля)</li>
+                                <li><strong>Смена почты</strong> - изменение email-адреса (требуется подтверждение нового адреса)</li>
+                                <li><strong>Журнал входов</strong> - просмотр истории авторизаций в систему</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Статистика -->
+                        <div class="instruction-block">
+                            <h3><i class="fas fa-chart-line"></i> Статистика</h3>
+                            <p>Раздел статистики отображает графики и таблицы с ключевыми показателями системы:</p>
+                            <ul>
+                                <li><strong>Распределение пользователей</strong> - количество пользователей по категориям</li>
+                                <li><strong>Бекап данных</strong> - возможность скачать резервную копию базы данных</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- База данных и Сервер -->
+                        <div class="instruction-block">
+                            <h3><i class="fas fa-database"></i> База данных и Сервер</h3>
+                            <p>Разделы базы данных и сервера предоставляют инструменты для работы с данными и мониторинга серверной части:</p>
+                            <ul>
+                                <li><strong>Просмотр и редактирование таблиц</strong> - прямой доступ к данным</li>
+                                <li><strong>Логи сервера</strong> - просмотр журналов системы</li>
+                            </ul>
+                            <div class="tip-box">
+                                <strong>Внимание!</strong> Будьте осторожны при внесении изменений в базу данных. Рекомендуется сделать бекап перед значительными изменениями.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Кнопка вызова инструкции была удалена отсюда -->
+    
+    <div class="modal hidden" id="userModal">
+        <div class="modal-content user-modal">
+            <div class="modal-header">
+                <div class="modal-icon" id="modalIcon"><i class="fas fa-user-shield"></i></div>
+                <h3 class="modal-title" id="modalTitle">Создание пользователя</h3>
+                <button class="close-modal">×</button>
+            </div>
+            <form id="userForm" class="user-form">
+                <input type="hidden" id="userType">
+                <div class="form-group">
+                    <label for="fullName"><i class="fas fa-user"></i> Полное имя</label>
+                    <input type="text" id="fullName" class="form-control" placeholder="Иванов Иван Иванович" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthDate"><i class="fas fa-birthday-cake"></i> Дата рождения</label>
+                    <input type="date" id="birthDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="userEmail" class="form-control" placeholder="email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="userPassword"><i class="fas fa-lock"></i> Пароль</label>
+                    <div class="password-input">
+                        <input type="password" id="userPassword" class="form-control" placeholder="Создайте надежный пароль" required>
+                        <i class="fas fa-eye toggle-password" id="toggleUserPassword"></i>
+                    </div>
+                </div>
+                <div class="form-group" id="confirmPasswordGroup">
+                    <label for="confirmPassword"><i class="fas fa-lock"></i> Подтверждение пароля</label>
+                    <div class="password-input">
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Повторите пароль" required>
+                        <i class="fas fa-eye toggle-password" id="toggleConfirmPassword"></i>
+                    </div>
+                </div>
+
+                <div id="studentFields" class="role-fields hidden">
+                    <div class="form-group">
+                        <label for="studentBalance"><i class="fas fa-wallet"></i> Изначальный баланс</label>
+                        <input type="number" id="studentBalance" class="form-control" placeholder="0" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPhone"><i class="fas fa-phone"></i> Номер телефона</label>
+                        <input type="tel" id="studentPhone" class="form-control" placeholder="+7...">
+                    </div>
+                </div>
+                <div id="teacherFields" class="role-fields hidden">
+                    <div class="form-group">
+                        <label for="teacherPhone"><i class="fas fa-phone"></i> Номер телефона</label>
+                        <input type="tel" id="teacherPhone" class="form-control" placeholder="+7...">
+                    </div>
+                </div>
+                <div id="adminFields" class="role-fields hidden">
+                    <div class="form-group">
+                        <label for="adminPhone"><i class="fas fa-phone"></i> Номер телефона</label>
+                        <input type="tel" id="adminPhone" class="form-control" placeholder="+7...">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i>
+                    Создать пользователя
+                </button>
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/supabase-service.js"></script>
+    <script src="js/supabase-sql.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing main...');
+            window.main = new Main();
+        });
+    </script>
+    <script src="js/main.js"></script>
+    <script src="js/preloader.js"></script>
+    <script src="js/instruction.js"></script>
+    <script src="js/settings.js"></script>
+</body>
+</html>

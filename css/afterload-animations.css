@@ -1,0 +1,259 @@
+/* Анимации появления блоков после загрузки страницы */
+
+/* Базовые параметры анимации */
+@keyframes fadeScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Анимация для шапки */
+header {
+    opacity: 0;
+    animation: fadeScale 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation-delay: 0.1s;
+}
+
+/* Анимация для боковой панели */
+.sidebar {
+    opacity: 0;
+    animation: fadeScale 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation-delay: 0.3s;
+}
+
+/* Анимация для основного контента - чуть дольше */
+.content {
+    opacity: 0;
+    animation: fadeScale 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    animation-delay: 0.5s;
+}
+
+/* Блоки внутри всех секций */
+.user-card, 
+#securitySection > div > div,
+#databaseSection > div,
+#serverSection > div,
+#statsSection > div,
+.instruction-block,
+canvas,
+.content-header {
+    opacity: 0;
+    animation: fadeScale 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+/* Последовательное появление элементов в разных секциях */
+/* Карточки пользователей */
+.user-card:nth-child(1) {
+    animation-delay: 0.6s;
+}
+
+.user-card:nth-child(2) {
+    animation-delay: 0.7s;
+}
+
+.user-card:nth-child(3) {
+    animation-delay: 0.8s;
+}
+
+.user-card:nth-child(4) {
+    animation-delay: 0.9s;
+}
+
+/* Безопасность */
+#securitySection .content-header {
+    animation-delay: 0.5s;
+}
+
+#securitySection > div > div:nth-child(1) {
+    animation-delay: 0.6s;
+}
+
+#securitySection > div > div:nth-child(2) {
+    animation-delay: 0.7s;
+}
+
+/* Статистика */
+#statsSection .content-header {
+    animation-delay: 0.5s;
+}
+
+#statsSection canvas {
+    animation-delay: 0.6s;
+}
+
+#statsSection #statsSummary {
+    animation-delay: 0.7s;
+}
+
+/* База данных и сервер */
+#databaseSection .content-header,
+#serverSection .content-header {
+    animation-delay: 0.5s;
+}
+
+#databaseSection > div:not(.content-header),
+#serverSection > div:not(.content-header) {
+    animation-delay: 0.6s;
+}
+
+/* Инструкция */
+#instructionSection .content-header {
+    animation-delay: 0.5s;
+}
+
+.instruction-block:nth-child(1) {
+    animation-delay: 0.6s;
+}
+
+.instruction-block:nth-child(2) {
+    animation-delay: 0.7s;
+}
+
+.instruction-block:nth-child(3) {
+    animation-delay: 0.8s;
+}
+
+.instruction-block:nth-child(4) {
+    animation-delay: 0.9s;
+}
+
+.instruction-block:nth-child(5) {
+    animation-delay: 1.0s;
+}
+
+/* Анимация для кнопки инструкции */
+.instruction-button {
+    opacity: 0;
+    animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation-delay: 1.2s; /* Появляется самой последней */
+}
+
+/* Анимационные эффекты для боковых пунктов меню */
+.nav-item {
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: slideRight 0.4s ease forwards;
+}
+
+@keyframes slideRight {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Анимации появления после загрузки - оптимизированы */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) translateZ(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+/* Более быстрая версия анимации */
+@keyframes fastFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.95) translateZ(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateZ(0);
+    }
+}
+
+/* Последовательное появление пунктов меню */
+.nav-item:nth-child(1) {
+    animation-delay: 0.35s;
+}
+
+.nav-item:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.nav-item:nth-child(3) {
+    animation-delay: 0.45s;
+}
+
+.nav-item:nth-child(4) {
+    animation-delay: 0.5s;
+}
+
+.nav-item:nth-child(5) {
+    animation-delay: 0.55s;
+}
+
+/* Анимация для заголовков в меню */
+.nav-title {
+    opacity: 0;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.nav-title:nth-of-type(1) {
+    animation-delay: 0.3s;
+}
+
+.nav-title:nth-of-type(2) {
+    animation-delay: 0.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Пульсирующая подсказка для новичков */
+.tip-pulse {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    animation: pulse 2s infinite;
+    opacity: 0;
+    animation-delay: 1.5s;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(124, 77, 255, 0.7);
+        opacity: 1;
+    }
+    
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(124, 77, 255, 0);
+        opacity: 1;
+    }
+    
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(124, 77, 255, 0);
+        opacity: 1;
+    }
+}

@@ -1,0 +1,3 @@
+Здесь будут размещены файлы шрифтов:
+- Gropled.otf
+- Benzin-Bold.otf

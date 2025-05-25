@@ -1,0 +1,205 @@
+/* Стили для раздела статистики */
+.stats-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stats-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: rgba(30, 30, 60, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(5px);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card i {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: #7c4dff;
+}
+
+.stat-card h3 {
+    font-size: 1em;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.stat-card p {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.stats-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.chart-container {
+    background: rgba(30, 30, 60, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    height: 300px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(5px);
+}
+
+.chart-container h3 {
+    color: #fff;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+/* Анимация появления */
+.stats-container {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Стили для таблицы */
+.stats-table {
+    background: rgba(30, 30, 60, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(5px);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table-header h3 {
+    color: #fff;
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.table-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.stats-table table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fff;
+}
+
+.stats-table th {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 2px solid rgba(124, 77, 255, 0.2);
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.stats-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stats-table tbody tr:hover {
+    background: rgba(124, 77, 255, 0.1);
+}
+
+/* Стили для бейджей ролей */
+.role-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.role-student {
+    background: rgba(124, 77, 255, 0.2);
+    color: #7c4dff;
+}
+
+.role-teacher {
+    background: rgba(255, 64, 129, 0.2);
+    color: #ff4081;
+}
+
+.role-admin {
+    background: rgba(0, 230, 118, 0.2);
+    color: #00e676;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .stats-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-charts {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+    .table-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .table-controls {
+        width: 100%;
+    }
+
+    .table-controls select {
+        flex: 1;
+    }
+
+    .stats-table {
+        padding: 10px;
+    }
+
+    .stats-table th,
+    .stats-table td {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+}

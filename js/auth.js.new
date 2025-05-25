@@ -1,0 +1,355 @@
+window.addEventListener('DOMContentLoaded', function() {
+    var errorElement = document.getElementById('authError');
+    if (errorElement) {
+        errorElement.style.display = 'none';
+    }
+});
+
+class Auth {
+    constructor() {
+        this.user = null;
+        this.init();
+        
+        // Настройка персистентной сессии
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (event === 'SIGNED_IN' && session) {
+                // Сохраняем сессию в localStorage и cookies
+                localStorage.setItem('supabaseSession', JSON.stringify(session));
+                
+                // Сохраняем в cookies
+                if (typeof CookieUtils !== 'undefined') {
+                    // Сохраняем только необходимые данные, чтобы не переполнить куки
+                    const sessionData = {
+                        user_id: session.user.id,
+                        email: session.user.email,
+                        timestamp: new Date().getTime()
+                    };
+                    CookieUtils.setCookie('skillschoolSession', JSON.stringify(sessionData), 30); // 30 дней
+                }
+            } else if (event === 'SIGNED_OUT') {
+                // Удаляем сессию из localStorage и cookies
+                localStorage.removeItem('supabaseSession');
+                
+                // Удаляем из cookies
+                if (typeof CookieUtils !== 'undefined') {
+                    CookieUtils.deleteCookie('skillschoolSession');
+                }
+            }
+        });
+    }
+
+    async init() {
+        // Проверяем куки в первую очередь
+        if (typeof CookieUtils !== 'undefined') {
+            const cookieSession = CookieUtils.getCookie('skillschoolSession');
+            if (cookieSession) {
+                try {
+                    const sessionData = JSON.parse(cookieSession);
+                    const currentTime = new Date().getTime();
+                    const sessionTimestamp = sessionData.timestamp || 0;
+                    
+                    // Проверяем, что сессия не старше 30 дней
+                    if (currentTime - sessionTimestamp < 30 * 24 * 60 * 60 * 1000) {
+                        this.user = {
+                            id: sessionData.user_id,
+                            email: sessionData.email
+                        };
+                        return;
+                    }
+                } catch (e) {
+                    console.info('Ошибка при разборе сессии из cookies:', e);
+                }
+            }
+        }
+        
+        // Затем проверяем localStorage
+        const sessionString = localStorage.getItem('supabaseSession');
+        if (sessionString) {
+            try {
+                const session = JSON.parse(sessionString);
+                if (session.user) {
+                    this.user = session.user;
+                    return;
+                }
+            } catch (e) {
+                console.info('Ошибка при разборе сессии из localStorage:', e);
+            }
+        }
+        
+        // Затем проверяем активную сессию Supabase
+        const { data: { session }, error } = await supabaseClient.auth.getSession();
+        if (error) {
+            console.info('Ошибка при получении сессии из Supabase:', error.message);
+        }
+        if (session && session.user) {
+            this.user = session.user;
+            return;
+        }
+        
+        // Показываем форму входа, так как пользователь не авторизован
+        this.showLoginForm();
+    }
+
+    showLoginForm() {
+        document.getElementById('authForm').addEventListener('submit', this.handleLogin.bind(this));
+        document.getElementById('googleAuthBtn').addEventListener('click', this.handleGoogleLogin.bind(this));
+        
+        // Показываем/скрываем пароль
+        const togglePassword = document.getElementById('togglePassword');
+        if (togglePassword) {
+            togglePassword.addEventListener('click', function() {
+                const passwordInput = document.getElementById('authPassword');
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    this.classList.remove('fa-eye');
+                    this.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    this.classList.remove('fa-eye-slash');
+                    this.classList.add('fa-eye');
+                }
+            });
+        }
+    }
+
+    async handleLogin(event) {
+        event.preventDefault();
+        
+        const email = document.getElementById('authEmail').value;
+        const password = document.getElementById('authPassword').value;
+        
+        if (!this.validateEmail(email)) {
+            this.showError('Пожалуйста, введите корректный email');
+            return;
+        }
+        
+        try {
+            document.getElementById('loadingSpinner').style.display = 'flex';
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
+            
+            if (error) {
+                throw error;
+            }
+            
+            this.user = data.user;
+            this.showMainContainer();
+        } catch (error) {
+            console.info('Ошибка при входе:', error.message);
+            
+            if (error.message.includes('Invalid login credentials')) {
+                this.showError('Неверный email или пароль');
+            } else {
+                this.showError('Ошибка входа: ' + error.message);
+            }
+        } finally {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+    }
+
+    async handleGoogleLogin() {
+        try {
+            document.getElementById('loadingSpinner').style.display = 'flex';
+            const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin
+                }
+            });
+            
+            if (error) {
+                throw error;
+            }
+            
+        } catch (error) {
+            console.info('Ошибка при входе через Google:', error.message);
+            this.showError('Ошибка входа через Google: ' + error.message);
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+    }
+
+    showError(message) {
+        const errorElement = document.getElementById('authError');
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+
+    hideError() {
+        const errorElement = document.getElementById('authError');
+        if (errorElement) {
+            errorElement.textContent = '';
+            errorElement.style.display = 'none';
+        }
+    }
+
+    validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    async logout() {
+        try {
+            await supabaseClient.auth.signOut();
+            this.user = null;
+            this.showAuthContainer();
+        } catch (error) {
+            console.info('Ошибка при выходе из системы:', error.message);
+        }
+    }
+
+    async createUser(userData) {
+        try {
+            const { data: authData, error } = await supabaseClient.auth.signUp({
+                email: userData.email,
+                password: userData.password
+            });
+            
+            if (error) {
+                throw error;
+            }
+            
+            const dbUserData = {
+                id: authData.user.id,
+                email: userData.email,
+                fullname: userData.fullName,
+                role: userData.role
+            };
+            
+            await Database.createUser(dbUserData);
+            
+            switch (userData.role) {
+                case 'student':
+                    await Database.createStudent({
+                        user_id: authData.user.id,
+                        school_id: userData.school_id
+                    });
+                    break;
+                case 'teacher':
+                    await Database.createTeacher({
+                        user_id: authData.user.id,
+                        school_id: userData.school_id
+                    });
+                    break;
+                case 'assistant':
+                    await Database.createAssistant({
+                        user_id: authData.user.id,
+                        school_id: userData.school_id
+                    });
+                    break;
+                case 'admin':
+                    await Database.createAdmin({
+                        user_id: authData.user.id
+                    });
+                    break;
+            }
+            
+            return authData.user;
+        } catch (error) {
+            console.error('Ошибка при создании пользователя:', error);
+            throw error;
+        }
+    }
+
+    showAuthContainer() {
+        document.getElementById('authContainer').classList.remove('hidden');
+        document.getElementById('mainContainer').classList.add('hidden');
+    }
+
+    showMainContainer() {
+        // Простое исчезновение блока авторизации
+        const authContainer = document.getElementById('authContainer');
+        const self = this;
+        
+        // Быстрое исчезновение без анимаций
+        authContainer.classList.add('hidden');
+        
+        // Создаем и показываем второй прелоадер
+        const secondPreloader = document.createElement('div');
+        secondPreloader.className = 'site-preloader';
+        secondPreloader.id = 'secondPreloader';
+        
+        // HTML для прелоадера
+        secondPreloader.innerHTML = `
+            <div class="animated-bg"></div>
+            <div class="preloader-content">
+                <div class="loading-content show">
+                    <div class="preloader-logo">
+                        <i class="fas fa-user-shield fa-2x"></i>
+                    </div>
+                    <div class="preloader-spinner"></div>
+                    <div class="preloader-text">Загружаем систему...</div>
+                    <div class="fun-fact" id="secondFunFact">Загрузка данных...</div>
+                </div>
+            </div>
+        `;
+        
+        // Добавляем в DOM
+        document.body.appendChild(secondPreloader);
+        
+        // Текст загрузки
+        const funFacts = [
+            'Загрузка данных...',
+            'Подключение к базе данных...',
+            'Подготовка интерфейса...'
+        ];
+        
+        const secondFunFactElement = document.getElementById('secondFunFact');
+        let currentFactIndex = 0;
+        
+        // Быстрая смена текста
+        const funFactInterval = setInterval(function() {
+            if (secondFunFactElement) {
+                currentFactIndex = (currentFactIndex + 1) % funFacts.length;
+                secondFunFactElement.textContent = funFacts[currentFactIndex];
+            }
+        }, 1000);
+        
+        // Быстрый переход к основному контейнеру
+        setTimeout(function() {
+            // Скрываем прелоадер
+            secondPreloader.style.display = 'none';
+            
+            // Останавливаем интервал
+            clearInterval(funFactInterval);
+            
+            // Показываем основной контент
+            const mainContainer = document.getElementById('mainContainer');
+            mainContainer.classList.remove('hidden');
+            
+            // Обновляем данные
+            self.updateUserInfo();
+            self.hideError();
+            
+            // Удаляем прелоадер
+            if (secondPreloader && secondPreloader.parentNode) {
+                secondPreloader.parentNode.removeChild(secondPreloader);
+            }
+        }, 2000);
+    }
+
+    updateUserInfo() {
+        if (this.user) {
+            const userNameElement = document.getElementById('userName');
+            const userAvatarElement = document.getElementById('userAvatar');
+            
+            if (userNameElement) {
+                userNameElement.textContent = this.user.email || 'Пользователь';
+            }
+            
+            if (userAvatarElement) {
+                const firstLetter = (this.user.email || 'U').charAt(0).toUpperCase();
+                userAvatarElement.textContent = firstLetter;
+            }
+            
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', this.logout.bind(this));
+            }
+        }
+    }
+}
+
+// Инициализация
+const auth = new Auth();

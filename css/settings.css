@@ -1,0 +1,319 @@
+/* Стили для раздела настроек */
+.settings-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid rgba(124, 77, 255, 0.4);
+    color: #a294ff;
+    transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+    background: rgba(124, 77, 255, 0.1);
+    border-color: #a294ff;
+}
+
+.btn-sm {
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.settings-block {
+    background: rgba(25, 25, 41, 0.7);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.settings-block h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #a294ff;
+    display: flex;
+    align-items: center;
+}
+
+.settings-block h3 i {
+    margin-right: 10px;
+    background: rgba(124, 77, 255, 0.15);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.settings-row {
+    margin-bottom: 16px;
+}
+
+.settings-row:last-child {
+    margin-bottom: 0;
+}
+
+.settings-row label {
+    display: block;
+    margin-bottom: 10px;
+    color: #b3b3cc;
+    font-size: 15px;
+}
+
+.form-control {
+    width: 100%;
+    background: rgba(30, 30, 50, 0.6);
+    border: 1px solid rgba(124, 77, 255, 0.3);
+    color: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #8a5cf2;
+    outline: none;
+}
+
+.btn {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn-primary {
+    background: #7c4dff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #8a5cf2;
+    transform: translateY(-2px);
+}
+
+.btn-block {
+    width: 100%;
+    display: block;
+}
+
+/* Строка с кнопкой применения языка */
+.settings-block .settings-row:first-of-type {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.settings-block .settings-row:first-of-type select {
+    flex: 1;
+}
+
+.settings-block .settings-row:first-of-type button {
+    min-width: 120px;
+}
+
+/* Стили для выбора темы */
+.theme-options {
+    display: flex;
+    gap: 16px;
+}
+
+.theme-card {
+    width: 90px;
+    height: 90px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+    margin-right: 15px;
+}
+
+.theme-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(124, 77, 255, 0.15);
+}
+
+.theme-card.active {
+    border: 2px solid #7c4dff;
+}
+
+.theme-card.active::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #7c4dff;
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+.theme-preview {
+    width: 100%;
+    height: 60px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-card span {
+    display: block;
+    font-size: 14px;
+    color: #b3b3cc;
+    padding: 5px;
+    text-align: center;
+}
+
+/* Темы */
+.default-theme {
+    background-color: #1e1e35;
+    background-image: linear-gradient(to bottom right, #1e1e35, #39397a);
+}
+
+.dark-theme {
+    background-color: #121212;
+    background-image: linear-gradient(to bottom right, #121212, #2d2d2d);
+}
+
+.light-theme {
+    background-color: #f5f5f5;
+    background-image: linear-gradient(to bottom right, #ffffff, #e0e0e0);
+}
+
+/* Настройки шрифтов */
+.font-settings {
+    display: flex;
+    flex-direction: column;
+}
+
+.range-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.settings-range {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(124, 77, 255, 0.2);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.settings-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #7c4dff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#fontSizeValue {
+    min-width: 40px;
+    color: #b3b3cc;
+}
+
+.font-hint {
+    font-size: 13px;
+    color: #888;
+    margin-top: 5px;
+}
+
+.font-preview-container {
+    background: rgba(30, 30, 50, 0.6);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+    display: block;
+}
+
+.font-preview-text {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #d1d1e0;
+    white-space: normal;
+    word-wrap: break-word;
+    width: 100%;
+}
+
+.form-range::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* Стили для загрузки файла */
+input[type="file"] {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 8px;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Анимация появления */
+#settingsSection {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
